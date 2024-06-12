@@ -36,7 +36,6 @@ module Arproxy
         alias_method :execute_without_arproxy, :execute
         alias_method :execute, :execute_with_arproxy
 
-        private
         def exec_query_with_arproxy(sql, name = nil, binds = [], **kwargs)
           ::Arproxy.proxy_chain.connection = self
           ::Arproxy.proxy_chain.head.send :exec_query, sql, name, binds, **kwargs
@@ -58,8 +57,6 @@ module Arproxy
     def disable!
       @config.adapter_class.class_eval do
         alias_method :execute, :execute_without_arproxy
-
-        private
         alias_method :exec_query, :exec_query_without_arproxy
         alias_method :internal_exec_query, :internal_exec_query_without_arproxy
         ::Arproxy.logger.debug('Arproxy: Disabled')
